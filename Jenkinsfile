@@ -73,6 +73,7 @@ pipeline{
                             } else{
                                 sh(label:"Running Homebrew Test-Bot",
                                     script: "sh ./build_bottle.sh ${HOMEBREW_FORMULA_FILE}"
+                                    )
                             }
                         }
                     }
