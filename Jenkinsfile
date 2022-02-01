@@ -111,7 +111,7 @@ pipeline{
                                 quoteValue: false,
                                 saveJSONParameterToFile: false,
                                 type: 'PT_MULTI_SELECT',
-                                value: 'https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles/release',
+                                value: 'https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles/release,https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles/beta',
                                 visibleItemCount: 5
                                 )
                         }
