@@ -6,15 +6,15 @@ class SpeedwagonBeta < Formula # rubocop:disable Metrics/ClassLength
   include Language::Python::Virtualenv
   desc "Collection of tools and workflows for DS"
   homepage "https://github.com/UIUCLibrary/Speedwagon"
-  url "https://github.com/UIUCLibrary/Speedwagon/archive/refs/tags/0.2.0b3.tar.gz"
-  version "0.2.0b3"
-  sha256 "437aa11cf9633be0fae2f155c3047e80275bb258a935e24fa40a7eae9762bd31"
+  url "https://github.com/UIUCLibrary/Speedwagon/archive/refs/tags/0.2.0b4.tar.gz"
+  version "0.2.0b4"
+  sha256 "60ea439199d2ab83f70b0ce4e21de91796ce6f5f28740d4b0503a04d37315d67"
   version_scheme 1
   head "https://github.com/UIUCLibrary/Speedwagon.git", branch: "master"
 
   bottle do
     root_url "https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles/beta/"
-    sha256 cellar: :any, catalina: "1131910f8cbf2e1648b439af093f9bb48bbeefed7b874034746ffa6b496e525d"
+    sha256 cellar: :any, catalina: "74ef9148d73f2c58a2c47075f669fcddb2280ab06376099b367bba2e94ffd5f6"
   end
 
   depends_on "cmake" => :build
