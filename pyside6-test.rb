@@ -35,7 +35,6 @@ class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
     system "#{libexec}/bin/pip", "install", "setuptools", "--upgrade"
 
     resource("pyside6").stage do
-
       pyside_args = %w[
         --no-examples
         --no-qt-tools
@@ -54,7 +53,6 @@ class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
   end
 
   test do
-
     modules = %w[
       Core
       Gui
