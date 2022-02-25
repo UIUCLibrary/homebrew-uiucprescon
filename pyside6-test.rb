@@ -1,10 +1,10 @@
-
+# Forumula for testing distribution of a pyside6 app
 class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
   include Language::Python::Virtualenv
   desc "test for pyside6."
   homepage "https://github.com/UIUCLibrary/SamplePyside6App"
-  head "https://github.com/henryborchers/hellopyside6.git", branch: "main"
   url "https://github.com/UIUCLibrary/SamplePyside6App/archive/refs/tags/0.1.tar.gz"
+  head "https://github.com/henryborchers/hellopyside6.git", branch: "main"
   sha256 "71a8d6ac675d60e94ca150737ca386a4492ca6615b0de693c40d4e9584cb4262"
 
   bottle do
@@ -16,8 +16,8 @@ class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
   depends_on "ninja" => :build
   depends_on xcode: :build
   depends_on "llvm"
-  depends_on "qt"
   depends_on "python@3.10"
+  depends_on "qt"
 
   resource "packaging" do
     url "https://files.pythonhosted.org/packages/df/9e/d1a7217f69310c1db8fdf8ab396229f55a699ce34a203691794c5d1cad0c/packaging-21.3.tar.gz"
