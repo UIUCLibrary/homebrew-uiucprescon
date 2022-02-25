@@ -1,3 +1,5 @@
+# typed: false
+
 # Forumula for testing distribution of a pyside6 app
 class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
   include Language::Python::Virtualenv
