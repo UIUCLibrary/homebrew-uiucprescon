@@ -12,7 +12,7 @@ class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
 
   bottle do
     root_url "https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles-beta/beta/"
-    sha256 cellar: :any, catalina: "87c0dc3c5bde7f3413415ac7500a1d9c31ac9da6cf40baa53bd7cff38c053339"
+    sha256 cellar: :any, catalina: "96829829229f3df61c397870cd3370bc3acf3a42d889c30584bea83c2fb9cf3d"
   end
 
   depends_on "cmake" => :build
@@ -55,16 +55,16 @@ class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
     venv.pip_install_and_link buildpath
   end
 
+  modules = %w[
+    Core
+    Gui
+    Widgets
+    Network
+    Qml
+    OpenGL
+    Quick
+  ]
   test do
-    modules = %w[
-      Core
-      Gui
-      Widgets
-      Network
-      Qml
-      OpenGL
-      Quick
-    ]
     modules.each { |mod| system "#{libexec}/bin/python", "-c", "import PySide6.Qt#{mod}" }
     system "#{libexec}/bin/pip", "check"
     # `test do` will create, run in and delete a temporary directory.
