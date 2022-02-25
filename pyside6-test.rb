@@ -15,10 +15,6 @@ class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
     sha256 cellar: :any, catalina: "96829829229f3df61c397870cd3370bc3acf3a42d889c30584bea83c2fb9cf3d"
   end
 
-  depends_on "cmake" => :build
-  depends_on "ninja" => :build
-  depends_on xcode: :build
-  depends_on "llvm"
   depends_on "python@3.10"
   depends_on "qt"
 
