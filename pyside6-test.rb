@@ -12,10 +12,12 @@ class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
 
   bottle do
     root_url "https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles-beta/beta/"
-    sha256 cellar: :any, catalina: "96829829229f3df61c397870cd3370bc3acf3a42d889c30584bea83c2fb9cf3d"
+    sha256 cellar: :any, catalina: "b3cef404d7baa73e7ebf42323fbc32671afbcc98f877e69f2646c0806c32b35e"
   end
 
   depends_on "python@3.10"
+  depends_on "libpq"
+  depends_on "qt-libiodbc"
   depends_on "qt"
 
   resource "packaging" do
