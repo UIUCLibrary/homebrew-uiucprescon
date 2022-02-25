@@ -36,22 +36,22 @@ class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
     venv = virtualenv_create(libexec, "python3")
     system "#{libexec}/bin/python", "-m", "pip", "install", "pip", "--upgrade"
     system "#{libexec}/bin/pip", "install", "setuptools", "--upgrade"
-
-    resource("pyside6").stage do
-      pyside_args = %w[
-        --no-examples
-        --no-qt-tools
-        --rpath @loader_path/../shiboken6
-        --shorter-paths
-        --skip-docs
-        --verbose-build
-        --module-subset=Core,Gui,Widgets,Network,Qml,OpenGL,Quick
-      ]
-      # venv.pip_install resource ("packaging")
-      system "#{libexec}/bin/pip", "install", "packaging"
-      system "#{libexec}/bin/python", *Language::Python.setup_install_args(prefix), *pyside_args
-    end
-
+    #
+    # resource("pyside6").stage do
+    #   pyside_args = %w[
+    #     --no-examples
+    #     --no-qt-tools
+    #     --rpath @loader_path/../shiboken6
+    #     --shorter-paths
+    #     --skip-docs
+    #     --verbose-build
+    #     --module-subset=Core,Gui,Widgets,Network,Qml,OpenGL,Quick
+    #   ]
+    #   # venv.pip_install resource ("packaging")
+    #   system "#{libexec}/bin/pip", "install", "packaging"
+    #   system "#{libexec}/bin/python", *Language::Python.setup_install_args(prefix), *pyside_args
+    # end
+    system "#{libexec}/bin/pip", "install", "pyside6"
     venv.pip_install_and_link buildpath
   end
 
