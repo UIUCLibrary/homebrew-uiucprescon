@@ -1,11 +1,11 @@
 # Forumula for testing distribution of a pyside6 app
 class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
   include Language::Python::Virtualenv
-  desc "test for pyside6."
+  desc "Test for pyside6"
   homepage "https://github.com/UIUCLibrary/SamplePyside6App"
   url "https://github.com/UIUCLibrary/SamplePyside6App/archive/refs/tags/0.1.tar.gz"
-  head "https://github.com/henryborchers/hellopyside6.git", branch: "main"
   sha256 "71a8d6ac675d60e94ca150737ca386a4492ca6615b0de693c40d4e9584cb4262"
+  head "https://github.com/henryborchers/hellopyside6.git", branch: "main"
 
   bottle do
     root_url "https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles-beta/beta/"
