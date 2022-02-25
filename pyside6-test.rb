@@ -1,6 +1,7 @@
 # typed: false
+# frozen_string_literal: true
 
-# Forumula for testing distribution of a pyside6 app
+# Formula for testing distribution of a pyside6 app
 class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
   include Language::Python::Virtualenv
   desc "Test for pyside6"
