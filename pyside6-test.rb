@@ -32,7 +32,7 @@ class Pyside6Test < Formula # rubocop:disable Metrics/ClassLength
     sha256 "70d55e8fe977ffe094bba51119d16d37e0736df8693787110b127a2b4bd00003"
   end
 
-  def install
+  def install # rubocop:disable Metrics/MethodLength
     venv = virtualenv_create(libexec, "python3")
     system "#{libexec}/bin/python", "-m", "pip", "install", "pip", "--upgrade"
     system "#{libexec}/bin/pip", "install", "setuptools", "--upgrade"
