@@ -30,7 +30,7 @@ pipeline{
                     def forumla_audits = [:]
                     formulas.each{
                         forumla_audits[it.path] = {
-                            node('mac') {
+                            node('mac && homebrew') {
                                 stage("Auditing ${it.path}"){
                                     checkout scm
                                     catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE', message: "${it.path} failed audit") {
@@ -46,7 +46,7 @@ pipeline{
         }
         stage("Build"){
             agent {
-                label 'mac'
+                label 'mac && homebrew'
             }
             options {
                 lock('homebrew')
