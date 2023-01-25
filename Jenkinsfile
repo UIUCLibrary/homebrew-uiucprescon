@@ -1,11 +1,16 @@
 def formulas = []
+def casks = []
 node("") {
-    stage("Checking Formula files"){
+    stage("Checking Cask and Formula files"){
         ws{
             checkout scm
             findFiles( excludes: '', glob: '*.rb').each{
                 echo "Found ${it.path}"
                 formulas << it
+            }
+            findFiles( excludes: '', glob: 'Casks/*.rb').each{
+                echo "Found ${it.path}"
+                casks << it
             }
         }
     }
@@ -27,9 +32,9 @@ pipeline{
             }
             steps{
                 script{
-                    def forumla_audits = [:]
+                    def formula_audits = [:]
                     formulas.each{
-                        forumla_audits[it.path] = {
+                        formula_audits[it.path] = {
                             node('mac && homebrew') {
                                 stage("Auditing ${it.path}"){
                                     checkout scm
@@ -40,7 +45,20 @@ pipeline{
                             }
                         }
                     }
-                    parallel(forumla_audits)
+                    def cask_audits = [:]
+                    casks.each{
+                        cask_audits[it.path] = {
+                            node('mac && homebrew') {
+                                stage("Auditing ${it.path}"){
+                                    checkout scm
+                                    catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE', message: "${it.path} failed audit") {
+                                        sh "brew audit --cask ${it.path} --verbose"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    parallel(formula_audits + cask_audits)
                 }
             }
         }
