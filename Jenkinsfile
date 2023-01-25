@@ -1,7 +1,7 @@
 def formulas = []
 def casks = []
 node("") {
-    stage("Checking Cask and Formula files"){
+    stage("Checking for Homebrew files"){
         ws{
             checkout scm
             findFiles( excludes: '', glob: '*.rb').each{
@@ -21,6 +21,7 @@ pipeline{
     agent none
     parameters {
         booleanParam defaultValue: true, description: '', name: 'AUDIT_FORMULA'
+        booleanParam defaultValue: false, description: '', name: 'AUDIT_FORMULA_ONLINE_OPTION'
         booleanParam defaultValue: false, description: '', name: 'BOTTLE_FORMULA'
         booleanParam defaultValue: false, description: '', name: 'BOTTLE_UPLOAD'
     }
@@ -39,7 +40,11 @@ pipeline{
                                 stage("Auditing ${it.path}"){
                                     checkout scm
                                     catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE', message: "${it.path} failed audit") {
-                                        sh "brew audit --formula ${it.path} --verbose"
+                                        def auditCommand = "brew audit --formula ${it.path} --verbose"
+                                        if (params.AUDIT_FORMULA_ONLINE_OPTION) {
+                                            auditCommand = auditCommand + ' --online'
+                                        }
+                                        sh auditCommand
                                     }
                                 }
                             }
@@ -52,7 +57,11 @@ pipeline{
                                 stage("Auditing ${it.path}"){
                                     checkout scm
                                     catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE', message: "${it.path} failed audit") {
-                                        sh "brew audit --cask ${it.path} --verbose"
+                                        def auditCommand = "brew audit --cask ${it.path} --verbose"
+                                        if (params.AUDIT_FORMULA_ONLINE_OPTION) {
+                                            auditCommand = auditCommand + ' --online'
+                                        }
+                                        sh auditCommand
                                     }
                                 }
                             }
