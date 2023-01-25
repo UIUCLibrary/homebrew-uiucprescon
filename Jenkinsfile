@@ -111,18 +111,18 @@ pipeline{
                         message 'Upload artifact?'
                         parameters {
                             credentials credentialType: 'com.cloudbees.plugins.credentials.common.StandardCredentials', defaultValue: 'jenkins-nexus', name: 'NEXUS_CREDS', required: true
-                            extendedChoice(
+                             choice(
+                                choices: [
+                                    'https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles/release',
+                                    'https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles/beta'
+                                ],
                                 description: 'Where should the bottle files be deployed?',
-                                multiSelectDelimiter: ',',
-                                name: 'BOTTLE_URL_ROOTS',
-                                quoteValue: false,
-                                saveJSONParameterToFile: false,
-                                type: 'PT_MULTI_SELECT',
-                                value: 'https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles/release,https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles/beta',
-                                visibleItemCount: 5
+                                name: 'BOTTLE_URL_ROOT'
                                 )
                         }
                     }
+
+
                     options {
                         retry(3)
                     }
@@ -145,23 +145,21 @@ pipeline{
                                 }
                                 bottle['tags'].each { tag, tagData ->
                                     def put_response
-                                    BOTTLE_URL_ROOTS.split(',').each{ BOTTLE_URL_ROOT ->
-                                        try{
-                                            def localFilename = tagData['local_filename']
-                                            if(!localFilename){
-                                                error "${tag} is missing required field local_filename"
-                                            }
-
-                                            def filename = tagData['filename']
-                                            if(!filename){
-                                                error "${tag} is missing required field filename"
-                                            }
-                                            put_response = httpRequest authentication: NEXUS_CREDS, httpMode: 'PUT', uploadFile: tagData['local_filename'], url: "${BOTTLE_URL_ROOT}/${filename}", wrapAsMultipart: false
-                                        } catch(Exception e){
-                                            echo "Unable to upload bottle with the following information.\n${tagData}"
-                                            echo "http request response: ${put_response.content}"
-                                            throw e;
+                                    try{
+                                        def localFilename = tagData['local_filename']
+                                        if(!localFilename){
+                                            error "${tag} is missing required field local_filename"
                                         }
+
+                                        def filename = tagData['filename']
+                                        if(!filename){
+                                            error "${tag} is missing required field filename"
+                                        }
+                                        put_response = httpRequest authentication: NEXUS_CREDS, httpMode: 'PUT', uploadFile: tagData['local_filename'], url: "${BOTTLE_URL_ROOT}/${filename}", wrapAsMultipart: false
+                                    } catch(Exception e){
+                                        echo "Unable to upload bottle with the following information.\n${tagData}"
+                                        echo "http request response: ${put_response.content}"
+                                        throw e;
                                     }
                                 }
                             }
