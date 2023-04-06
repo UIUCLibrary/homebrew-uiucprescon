@@ -1,7 +1,7 @@
 cask "speedwagon" do
-  version "0.2.1"
-  sha256 arm: "2de26751f7c50dc4b4577696f636cc04a376976cab79159a03442f0f54c949bc",
-         intel: "3ecaef4fa9ac47317ab4113d698e8ee3136928e426728fef7abecd463a4e7428"
+  version "0.2.2"
+  sha256 arm: "de2e2c26f8f6caa859844ae661fb18c0e5f82cc8b2c781d51dc60704c44cf586",
+         intel: "1be47633520c379dcd1594347ac2ae13ca770061edd7a7492f89f3ed52f48316"
   arch arm: "arm64",
        intel: "x86_64"
   url "https://jenkins.library.illinois.edu/nexus/repository/prescon-dist/speedwagon/#{version}/speedwagon-#{version}-#{arch}.dmg",
