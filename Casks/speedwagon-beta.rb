@@ -4,8 +4,8 @@ cask "speedwagon-beta" do
          intel: "97f630292f028fb86241c2687828d6c37df2746953db9a4ae842f7654e922e21"
   arch arm: "arm64",
        intel: "x86_64"
-  url "https://jenkins.library.illinois.edu/nexus/repository/prescon-dist/speedwagon/#{version}/speedwagon-#{version}-#{arch}.dmg",
-      verified: "jenkins.library.illinois.edu/nexus/repository/prescon-dist/speedwagon"
+  url "https://nexus.library.illinois.edu/repository/prescon-dist/speedwagon/#{version}/speedwagon-#{version}-#{arch}.dmg",
+      verified: "nexus.library.illinois.edu/repository/prescon-dist/speedwagon"
   name "Speedwagon"
   desc "Collection of tools and workflows for DS"
   homepage "https://github.com/UIUCLibrary/Speedwagon"
