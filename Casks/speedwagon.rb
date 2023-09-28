@@ -4,7 +4,7 @@ cask "speedwagon" do
          intel: "1be47633520c379dcd1594347ac2ae13ca770061edd7a7492f89f3ed52f48316"
   arch arm: "arm64",
        intel: "x86_64"
-  url "https://nexus.library.illinois.edu/repository/prescon-dist/-dist/speedwagon/#{version}/speedwagon-#{version}-#{arch}.dmg",
+  url "https://nexus.library.illinois.edu/repository/prescon-dist/speedwagon/#{version}/speedwagon-#{version}-#{arch}.dmg",
       verified: "nexus.library.illinois.edu/repository/prescon-dist/speedwagon"
   name "Speedwagon"
   desc "Collection of tools and workflows for DS"
