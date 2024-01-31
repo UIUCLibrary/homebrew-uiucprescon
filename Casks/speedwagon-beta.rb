@@ -1,7 +1,7 @@
 cask "speedwagon-beta" do
-  version "0.3.0b11"
-  sha256 arm: "bc21bea27a89ebf77b294e7424abfb485773cebbf683666ff76b4881e1531938",
-         intel: "c746c6163af54785b29d9c1034e12a569bbf520d1978bf5ffafc63e743bf9cdf"
+  version "0.3.0b15"
+  sha256 arm: "bd2d1a6751f6f1cbbb399f493d08cb399d1e1f37d01d80f41d56617318bf1a52",
+         intel: "703bd7686d2ccf28d238979aaeb47866a76293173e590c3b6bd562a77bfb2ad9"
   arch arm: "arm64",
        intel: "x86_64"
   url "https://nexus.library.illinois.edu/repository/prescon-dist/speedwagon/#{version}/speedwagon-#{version}-#{arch}.dmg",
