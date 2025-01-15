@@ -1,5 +1,6 @@
 # typed: true
 # frozen_string_literal: true
+
 class Galatea < Formula
   include Language::Python::Virtualenv
   desc "Used for cleaning up metadata used by UIUC metadata"
