@@ -11,14 +11,20 @@ class Galatea < Formula
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
-  depends_on 'python@3.13'
+  depends_on "python@3.13"
+
+  bottle do
+    root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma: "5eecd3f955f1a427dcb072a76c8fb077ecaff9cc67e76f314cc5752bfaf841c6"
+    sha256 cellar: :any_skip_relocation, sonoma: "1d40f9e5a7b4114612a0137a099997bddce46b6e75e6c512e8467f11608e17bf"
+  end
 
   def install
     virtualenv_install_with_resources
   end
 
   test do
-    system "#{bin}/galatea", "--help"
-    system "#{bin}/galatea", "--version"
+    system bin/"galatea", "--help"
+    system bin/"galatea", "--version"
   end
 end
