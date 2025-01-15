@@ -101,7 +101,7 @@ pipeline{
                                 sh(label:"Running Homebrew Test-Bot",
                                     script: """ln -s \$PWD "\$(brew --repo uiuclibrary/build)"
                                                trap "rm \$(brew --repo uiuclibrary/build)" EXIT
-                                               brew test-bot --debug --verbose --tap uiuclibrary/build --root-url=https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles-beta/beta/ --only-formulae "\$(brew --repo uiuclibrary/build)/${HOMEBREW_FORMULA_FILE}"
+                                               brew test-bot --debug --verbose --tap uiuclibrary/build --root-url=https://nexus.library.illinois.edu/repository/homebrew-bottles-beta/ --only-formulae "\$(brew --repo uiuclibrary/build)/${HOMEBREW_FORMULA_FILE}"
                                                """
                                     )
 //                                 sh(label:"Running Homebrew Test-Bot",
