@@ -1,6 +1,6 @@
 def formulas = []
 def casks = []
-node("") {
+node("!windows") {
     stage("Checking for Homebrew files"){
         ws{
             checkout scm
