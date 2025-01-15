@@ -16,6 +16,9 @@ node("!windows") {
     }
 }
 
+def getHomebrewRepositoryPrefix(){
+    return sh(returnStdout: true, script: 'brew --repository').trim()
+}
 
 pipeline{
     agent none
@@ -26,48 +29,86 @@ pipeline{
         booleanParam defaultValue: false, description: '', name: 'BOTTLE_UPLOAD'
     }
     stages{
-        stage("Audit"){
+        stage('Audit'){
             when{
                 equals expected: true, actual: params.AUDIT_FORMULA
                 beforeAgent true
             }
-            steps{
-                script{
-                    def formula_audits = [:]
-                    formulas.each{
-                        formula_audits[it.path] = {
-                            node('mac && homebrew') {
-                                stage("Auditing ${it.path}"){
-                                    checkout scm
-                                    catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE', message: "${it.path} failed audit") {
-                                        def auditCommand = "brew audit --formula ${it.path} --verbose"
-                                        if (params.AUDIT_FORMULA_ONLINE_OPTION) {
-                                            auditCommand = auditCommand + ' --online'
+            environment{
+                TAP_USERNAME = 'homebrew-releaser'
+                TAP_NAME = 'test'
+            }
+            parallel{
+                stage('Audit Formulas'){
+                    agent {
+                        label 'mac && homebrew'
+                    }
+                    environment{
+                        HOMEBREW_GITHUB_API_TOKEN=credentials('GithubAPIkey')
+                        TAP_PATH="${getHomebrewRepositoryPrefix()}/Library/Taps/${env.TAP_USERNAME}/homebrew-${env.TAP_NAME}"
+                    }
+                    steps{
+                        lock("homebrew ${env.NODE_NAME}"){
+                            script{
+                                try{
+                                    sh(label: 'Update homebrew', script: 'brew update')
+                                    sh(label: 'Create a testing tap',
+                                       script: """brew tap-new ${env.TAP_USERNAME}/${env.TAP_NAME} --no-git"""
+                                    )
+                                    sh(label: 'Adding homebrew formula files to test tap',
+                                       script: "cp -r Formula/* ${env.TAP_PATH}/Formula"
+                                    )
+                                    findFiles(glob: 'Formula/*.rb').each{
+                                        stage("${it}"){
+                                           withEnv(["file=${it}"]) {
+                                              catchError(buildResult: 'UNSTABLE', message: "${env.file} failed audit", stageResult: 'UNSTABLE') {
+                                                 sh(label: "Auditing ${env.file}", script: "brew audit --verbose ${params.AUDIT_FORMULA_ONLINE_OPTION ? '--online' :''} --formula ${env.TAP_USERNAME}/${env.TAP_NAME}/\$(basename \${file%.rb})")
+                                              }
+                                           }
                                         }
-                                        sh auditCommand
                                     }
+                                } finally {
+                                   sh(label: 'Removing testing tap', script: 'brew untap --verbose --force $TAP_USERNAME/$TAP_NAME')
+                                }
+                             }
+                        }
+                    }
+                }
+                stage('Audit Casks'){
+                    agent {
+                        label 'mac && homebrew'
+                    }
+                    environment{
+                        HOMEBREW_GITHUB_API_TOKEN=credentials('GithubAPIkey')
+                        TAP_PATH="${getHomebrewRepositoryPrefix()}/Library/Taps/${env.TAP_USERNAME}/homebrew-${env.TAP_NAME}"
+                    }
+                    steps{
+                        lock("homebrew ${env.NODE_NAME}"){
+                            script{
+                                try{
+                                    sh(label: 'Update homebrew', script: 'brew update')
+                                    sh(label: 'Create a testing tap',
+                                       script: 'brew tap-new $TAP_USERNAME/$TAP_NAME --no-git'
+                                    )
+                                    sh(
+                                        label: 'Adding homebrew casks files to test tap',
+                                        script: "ln -s ${env.WORKSPACE}/Casks ${env.TAP_PATH}/Casks"
+                                    )
+                                    findFiles(glob: 'Casks/*.rb').each{
+                                        stage("${it}"){
+                                            withEnv(["file=${it}"]) {
+                                                catchError(buildResult: 'UNSTABLE', message: "${env.file} failed audit", stageResult: 'UNSTABLE') {
+                                                    sh(label: "Auditing ${env.file}", script: "brew audit --verbose ${params.AUDIT_FORMULA_ONLINE_OPTION ? '--online' :''} --cask ${env.TAP_USERNAME}/${env.TAP_NAME}/\$(basename \${file%.rb})")
+                                                }
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    sh(label: 'Removing testing tap', script: 'brew untap --force $TAP_USERNAME/$TAP_NAME')
                                 }
                             }
                         }
                     }
-                    def cask_audits = [:]
-                    casks.each{
-                        cask_audits[it.path] = {
-                            node('mac && homebrew') {
-                                stage("Auditing ${it.path}"){
-                                    checkout scm
-                                    catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE', message: "${it.path} failed audit") {
-                                        def auditCommand = "brew audit --cask ${it.path} --verbose"
-                                        if (params.AUDIT_FORMULA_ONLINE_OPTION) {
-                                            auditCommand = auditCommand + ' --online'
-                                        }
-                                        sh auditCommand
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    parallel(formula_audits + cask_audits)
                 }
             }
         }
