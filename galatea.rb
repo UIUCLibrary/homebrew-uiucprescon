@@ -11,7 +11,7 @@ class Galatea < Formula
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
-  depends_on "python@3.13"
+  depends_on 'python@3.13'
 
   def install
     virtualenv_install_with_resources
