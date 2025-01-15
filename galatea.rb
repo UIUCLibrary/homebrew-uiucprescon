@@ -3,6 +3,7 @@
 
 class Galatea < Formula
   include Language::Python::Virtualenv
+
   desc "Used for cleaning up metadata used by UIUC metadata"
   homepage "https://github.com/UIUCLibrary/galatea"
   url "https://github.com/UIUCLibrary/galatea/archive/refs/tags/v0.2.0.tar.gz"
