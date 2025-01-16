@@ -4,7 +4,7 @@ node("!windows") {
     stage("Checking for Homebrew files"){
         ws{
             checkout scm
-            findFiles( excludes: '', glob: '*.rb').each{
+            findFiles( excludes: '', glob: 'Formula/*.rb').each{
                 echo "Found ${it.path}"
                 formulas << it
             }
@@ -112,7 +112,7 @@ pipeline{
                 }
             }
         }
-        stage("Build"){
+        stage('Homebrew Bottle'){
             agent {
                 label 'mac && homebrew'
             }
@@ -130,33 +130,46 @@ pipeline{
                 parameters {
                     choice choices: formulas, description: 'Bottle Homebrew formula', name: 'HOMEBREW_FORMULA_FILE'
                     booleanParam defaultValue: false, description: 'Use head instead of version in formula', name: 'INSTALL_HEAD'
+                    choice(
+                        choices: [
+                            'https://nexus.library.illinois.edu/repository/homebrew-bottles',
+                            'https://nexus.library.illinois.edu/repository/homebrew-bottles-beta/'
+                        ],
+                        description: 'Where should the bottle files be deployed?',
+                        name: 'BOTTLE_URL_ROOT'
+                    )
                 }
             }
+            environment{
+                HOMEBREW_BUILD_TAP='uiuclibrary/build'
+            }
             stages{
-                stage("Homebrew test-bot"){
+                stage('Build Bottle'){
                     steps{
-                        script{
-                            if(INSTALL_HEAD == true){
-                                sh "brew install --build-bottle ${HOMEBREW_FORMULA_FILE} --HEAD"
-                            } else{
-                                sh(label:"Running Homebrew Test-Bot",
-                                    script: """ln -s \$PWD "\$(brew --repo uiuclibrary/build)"
-                                               trap "rm \$(brew --repo uiuclibrary/build)" EXIT
-                                               brew test-bot --debug --verbose --tap uiuclibrary/build --root-url=https://nexus.library.illinois.edu/repository/homebrew-bottles-beta/ --only-formulae "\$(brew --repo uiuclibrary/build)/${HOMEBREW_FORMULA_FILE}"
-                                               """
-                                    )
-//                                 sh(label:"Running Homebrew Test-Bot",
-//                                     script: "sh ./build_bottle.sh ${HOMEBREW_FORMULA_FILE}"
-//                                     )
+                        withEnv([
+                            "HOMEBREW_FORMULA_FILE=${HOMEBREW_FORMULA_FILE}",
+                            "BOTTLE_URL_ROOT=${BOTTLE_URL_ROOT}"
+                            ]) {
+                            script{
+                                try{
+                                    sh '''brew tap-new $HOMEBREW_BUILD_TAP --no-git
+                                          cp -r Formula/* $(brew --repo $HOMEBREW_BUILD_TAP)/Formula/
+                                       '''
+                                    try{
+                                        sh '''brew install --build-bottle --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
+                                              brew bottle --json  --root-url=${BOTTLE_URL_ROOT}/ "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
+                                           '''
+                                        archiveArtifacts(artifacts: '*.bottle.tar.gz,*.bottle.json', allowEmptyArchive: true)
+                                    } finally{
+                                        sh 'brew uninstall --force --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"'
+                                    }
+                                } finally {
+                                    sh 'brew untap --verbose --force $HOMEBREW_BUILD_TAP'
+                                }
                             }
                         }
                     }
                     post{
-                        always{
-                            sh 'ls -laR'
-                            archiveArtifacts artifacts: "logs/,steps_output.txt"
-                            archiveArtifacts(artifacts: '*.bottle.tar.gz,*.bottle.json', allowEmptyArchive: true)
-                        }
                         failure{
                             sh "brew config"
                         }
@@ -178,18 +191,8 @@ pipeline{
                         message 'Upload artifact?'
                         parameters {
                             credentials credentialType: 'com.cloudbees.plugins.credentials.common.StandardCredentials', defaultValue: 'jenkins-nexus', name: 'NEXUS_CREDS', required: true
-                             choice(
-                                choices: [
-                                    'https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles/release',
-                                    'https://jenkins.library.illinois.edu/nexus/repository/homebrew-bottles/beta'
-                                ],
-                                description: 'Where should the bottle files be deployed?',
-                                name: 'BOTTLE_URL_ROOT'
-                                )
                         }
                     }
-
-
                     options {
                         retry(3)
                     }
@@ -200,7 +203,7 @@ pipeline{
                     steps{
                         script{
                             findFiles( excludes: '', glob: '*.bottle.json').each{
-                                def formulaName = HOMEBREW_FORMULA_FILE.replace(".rb", "")
+                                def formulaName = HOMEBREW_FORMULA_FILE.replace('Formula/', "").replace(".rb", "")
                                 def jsonData = readJSON( file: it.path)
                                 def bottle
                                 def key = "uiuclibrary/build/${formulaName}".toLowerCase()
@@ -211,21 +214,28 @@ pipeline{
                                     error "invalid data with key ${key}"
                                 }
                                 bottle['tags'].each { tag, tagData ->
-                                    def put_response
+                                    def filename
+                                    def localFilename
                                     try{
-                                        def localFilename = tagData['local_filename']
+                                        localFilename = tagData['local_filename']
                                         if(!localFilename){
                                             error "${tag} is missing required field local_filename"
                                         }
 
-                                        def filename = tagData['filename']
+                                        filename = tagData['filename']
                                         if(!filename){
                                             error "${tag} is missing required field filename"
                                         }
+                                    } catch(Exception e){
+                                        echo "Unable to extract the information needed to upload file:. Reason: ${e}"
+                                        throw e
+                                    }
+                                    def put_response
+                                    try{
                                         put_response = httpRequest authentication: NEXUS_CREDS, httpMode: 'PUT', uploadFile: tagData['local_filename'], url: "${BOTTLE_URL_ROOT}/${filename}", wrapAsMultipart: false
                                     } catch(Exception e){
                                         echo "Unable to upload bottle with the following information.\n${tagData}"
-                                        echo "http request response: ${put_response.content}"
+                                        echo "http request response: ${put_response}"
                                         throw e;
                                     }
                                 }
