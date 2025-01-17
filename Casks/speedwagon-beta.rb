@@ -12,4 +12,8 @@ cask "speedwagon-beta" do
   conflicts_with formula: "speedwagon",
                  cask: "speedwagon"
   app "Speedwagon.app"
+
+  livecheck do
+    skip "No version information available"
+  end
 end
