@@ -14,7 +14,7 @@ class Galatea < Formula
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
     sha256 cellar: :any_skip_relocation, arm64_sonoma: "5eecd3f955f1a427dcb072a76c8fb077ecaff9cc67e76f314cc5752bfaf841c6"
-    sha256 cellar: :any_skip_relocation, sonoma: "1d40f9e5a7b4114612a0137a099997bddce46b6e75e6c512e8467f11608e17bf"
+    sha256 cellar: :any_skip_relocation, sonoma:       "1d40f9e5a7b4114612a0137a099997bddce46b6e75e6c512e8467f11608e17bf"
   end
 
   depends_on "python@3.13"
