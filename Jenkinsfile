@@ -131,7 +131,7 @@ pipeline{
                     choice(
                         choices: [
                             'https://nexus.library.illinois.edu/repository/homebrew-bottles',
-                            'https://nexus.library.illinois.edu/repository/homebrew-bottles-beta/'
+                            'https://nexus.library.illinois.edu/repository/homebrew-bottles-beta'
                         ],
                         description: 'Where should the bottle files be deployed?',
                         name: 'BOTTLE_URL_ROOT'
@@ -141,7 +141,8 @@ pipeline{
             environment{
                 HOMEBREW_BUILD_TAP='uiuclibrary/build'
             }
-
+// todo: Make this upload to folder based on formulat name
+// fixme: Make sure that this uploaded as file name not local file name
             stages{
                 stage('Build Bottles'){
                     matrix {
@@ -168,6 +169,7 @@ pipeline{
                                                    '''
                                                 try{
                                                     sh '''brew install --build-bottle --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
+                                                          brew test "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
                                                           brew bottle --json  --root-url=${BOTTLE_URL_ROOT}/ "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
                                                        '''
                                                     archiveArtifacts(artifacts: '*.bottle.tar.gz,*.bottle.json', allowEmptyArchive: true)
