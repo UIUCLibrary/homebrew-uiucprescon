@@ -1,5 +1,6 @@
 def formulas = []
 def casks = []
+bottlesBuild = []
 node("!windows") {
     stage("Checking for Homebrew files"){
         ws{
@@ -112,10 +113,7 @@ pipeline{
                 }
             }
         }
-        stage('Homebrew Bottle'){
-            agent {
-                label 'mac && homebrew'
-            }
+        stage('Homebrew Bottles'){
             options {
                 lock('homebrew')
             }
@@ -143,50 +141,71 @@ pipeline{
             environment{
                 HOMEBREW_BUILD_TAP='uiuclibrary/build'
             }
+
             stages{
-                stage('Build Bottle'){
-                    steps{
-                        withEnv([
-                            "HOMEBREW_FORMULA_FILE=${HOMEBREW_FORMULA_FILE}",
-                            "BOTTLE_URL_ROOT=${BOTTLE_URL_ROOT}"
-                            ]) {
-                            script{
-                                try{
-                                    sh '''brew tap-new $HOMEBREW_BUILD_TAP --no-git
-                                          cp -r Formula/* $(brew --repo $HOMEBREW_BUILD_TAP)/Formula/
-                                       '''
-                                    try{
-                                        sh '''brew install --build-bottle --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
-                                              brew bottle --json  --root-url=${BOTTLE_URL_ROOT}/ "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
-                                           '''
-                                        archiveArtifacts(artifacts: '*.bottle.tar.gz,*.bottle.json', allowEmptyArchive: true)
-                                    } finally{
-                                        sh 'brew uninstall --force --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"'
+                stage('Build Bottles'){
+                    matrix {
+                        axes {
+                            axis {
+                                name 'ARCHITECTURE'
+                                values 'arm64','x86_64'
+                            }
+                        }
+                        stages {
+                            stage('Build Bottle') {
+                                agent {
+                                    label "mac && homebrew && ${ARCHITECTURE}"
+                                }
+                                steps{
+                                    withEnv([
+                                        "HOMEBREW_FORMULA_FILE=${HOMEBREW_FORMULA_FILE}",
+                                        "BOTTLE_URL_ROOT=${BOTTLE_URL_ROOT}"
+                                        ]) {
+                                        script{
+                                            try{
+                                                sh '''brew tap-new $HOMEBREW_BUILD_TAP --no-git
+                                                      cp -r Formula/* $(brew --repo $HOMEBREW_BUILD_TAP)/Formula/
+                                                   '''
+                                                try{
+                                                    sh '''brew install --build-bottle --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
+                                                          brew bottle --json  --root-url=${BOTTLE_URL_ROOT}/ "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
+                                                       '''
+                                                    archiveArtifacts(artifacts: '*.bottle.tar.gz,*.bottle.json', allowEmptyArchive: true)
+                                                    def stashName = "bottle-${ARCHITECTURE}"
+                                                    stash includes: '*.bottle.tar.gz,*.bottle.json', name: stashName
+                                                    bottlesBuild << stashName
+                                                } finally{
+                                                    sh 'brew uninstall --force --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"'
+                                                }
+                                            } finally {
+                                                sh 'brew untap --verbose --force $HOMEBREW_BUILD_TAP'
+                                            }
+                                        }
                                     }
-                                } finally {
-                                    sh 'brew untap --verbose --force $HOMEBREW_BUILD_TAP'
+                                }
+                                post{
+                                    failure{
+                                        sh "brew config"
+                                    }
+                                    cleanup{
+                                        sh "brew tap --repair"
+                                        cleanWs(
+                                            deleteDirs: true,
+                                            patterns: [
+                                                [pattern: '*.bottle.*', type: 'INCLUDE'],
+                                                [pattern: 'logs/', type: 'INCLUDE'],
+                                                [pattern: 'home/', type: 'INCLUDE'],
+                                                [pattern: 'steps_output.txt', type: 'INCLUDE'],
+                                            ]
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
-                    post{
-                        failure{
-                            sh "brew config"
-                        }
-                        cleanup{
-                            sh "brew tap --repair"
-                            cleanWs(
-                                deleteDirs: true,
-                                patterns: [
-                                    [pattern: 'logs/', type: 'INCLUDE'],
-                                    [pattern: 'home/', type: 'INCLUDE'],
-                                    [pattern: 'steps_output.txt', type: 'INCLUDE'],
-                                ]
-                            )
-                        }
-                    }
                 }
                 stage("Upload new bottle to repository"){
+                    agent any
                     input {
                         message 'Upload artifact?'
                         parameters {
@@ -202,6 +221,9 @@ pipeline{
                     }
                     steps{
                         script{
+                            bottlesBuild.each{
+                                unstash "${it}"
+                            }
                             findFiles( excludes: '', glob: '*.bottle.json').each{
                                 def formulaName = HOMEBREW_FORMULA_FILE.replace('Formula/', "").replace(".rb", "")
                                 def jsonData = readJSON( file: it.path)
@@ -242,23 +264,16 @@ pipeline{
                             }
                         }
                     }
-                }
-            }
-            post{
-//                 always{
-//                     archiveArtifacts artifacts: "*.bottle.*,${HOMEBREW_FORMULA_FILE}"
-//                 }
-                cleanup{
-                    sh( label: "Removing ${HOMEBREW_FORMULA_FILE}",
-                        script: "brew uninstall --formula ${HOMEBREW_FORMULA_FILE} -v || echo '${HOMEBREW_FORMULA_FILE} not installed'",
-                        returnStatus:true
-                    )
-                    cleanWs(
-                        deleteDirs: true,
-                        patterns: [
-                            [pattern: '*.bottle.*', type: 'INCLUDE'],
-                        ]
-                    )
+                    post{
+                        cleanup{
+                            cleanWs(
+                                deleteDirs: true,
+                                patterns: [
+                                    [pattern: '*.bottle.*', type: 'INCLUDE'],
+                                ]
+                            )
+                        }
+                    }
                 }
             }
         }
