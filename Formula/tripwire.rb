@@ -11,6 +11,12 @@ class Tripwire < Formula
   license "NCSA"
   head "https://github.com/UIUCLibrary/tripwire.git", branch: "main"
 
+  bottle do
+    root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma: "634fa662c44105e50357798612902087909f89af83c348ddbce2e2316a9006ee"
+    sha256 cellar: :any_skip_relocation, sonoma:       "3cdbbdcc2df76bfd04c1cbd321171763c6f53ba4f925f1a3e8c91931015f79fa"
+  end
+
   depends_on "python@3.13"
 
   resource "tqdm" do
