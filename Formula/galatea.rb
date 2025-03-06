@@ -6,18 +6,23 @@ class Galatea < Formula
 
   desc "Used for cleaning up metadata used by UIUC metadata"
   homepage "https://github.com/UIUCLibrary/galatea"
-  url "https://github.com/UIUCLibrary/galatea/archive/refs/tags/v0.3.0.tar.gz"
-  sha256 "352d009f12fd95a8559cedb59c25ab24e83d77cbb32fde2c921ed9e22e3d9112"
+  url "https://github.com/UIUCLibrary/galatea/archive/refs/tags/v0.3.1.tar.gz"
+  sha256 "b0c3f51e2d4d00015d520959fef76ecf0938600709689830cff3d5ef7597728e"
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma: "2d1d8275afa49dcc4d26444330bfcb0dfb8f6553739889ea99b7726a2b73e762"
-    sha256 cellar: :any_skip_relocation, sonoma:       "b5c42bd6f34be1062775fb7f9be1ce060a2f11a8dc477828fe33f83eb47d4785"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma: "bbf44835dd921a1e9b7ac32f8c4d85ccaa9504e2e4da57be744d06a5880809b2"
+    sha256 cellar: :any_skip_relocation, sonoma:       "e7139f3d3309658e5a12ec91a6ccac117ecec92185403cf99ae493ea17c76b60"
   end
 
   depends_on "python@3.13"
+
+  resource "argcomplete" do
+    url "https://files.pythonhosted.org/packages/ee/be/29abccb5d9f61a92886a2fba2ac22bf74326b5c4f55d36d0a56094630589/argcomplete-3.6.0.tar.gz"
+    sha256 "2e4e42ec0ba2fff54b0d244d0b1623e86057673e57bafe72dda59c64bd5dee8b"
+  end
 
   resource "certifi" do
     url "https://files.pythonhosted.org/packages/1c/ab/c9f1e32b7b1bf505bf26f0ef697775960db7932abeb7b516de930ba2705f/certifi-2025.1.31.tar.gz"
@@ -46,6 +51,11 @@ class Galatea < Formula
 
   def install
     virtualenv_install_with_resources
+    generate_completions_from_executable(
+      libexec/"bin/register-python-argcomplete", "galatea",
+      base_name:              "galatea",
+      shell_parameter_format: :arg
+    )
   end
 
   test do
