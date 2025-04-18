@@ -6,22 +6,22 @@ class Galatea < Formula
 
   desc "Used for cleaning up metadata used by UIUC metadata"
   homepage "https://github.com/UIUCLibrary/galatea"
-  url "https://github.com/UIUCLibrary/galatea/archive/refs/tags/v0.3.1.tar.gz"
-  sha256 "b0c3f51e2d4d00015d520959fef76ecf0938600709689830cff3d5ef7597728e"
+  url "https://github.com/UIUCLibrary/galatea/archive/refs/tags/v0.3.2.tar.gz"
+  sha256 "1efe2c1dfbde90b023c565ed3ecf998c4853b63da6686bfce357bd022d703180"
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma: "bbf44835dd921a1e9b7ac32f8c4d85ccaa9504e2e4da57be744d06a5880809b2"
-    sha256 cellar: :any_skip_relocation, sonoma:       "e7139f3d3309658e5a12ec91a6ccac117ecec92185403cf99ae493ea17c76b60"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma: "4e115878cd291ce1ec8c5a255077f71c81c01bedda444ae8c705c0255d93461a"
+    sha256 cellar: :any_skip_relocation, sonoma:       "15722e24cc56f04c0310831ea62c9b54b8880ce335f716b35a102f5d9de7b501"
   end
 
   depends_on "python@3.13"
 
   resource "argcomplete" do
-    url "https://files.pythonhosted.org/packages/ee/be/29abccb5d9f61a92886a2fba2ac22bf74326b5c4f55d36d0a56094630589/argcomplete-3.6.0.tar.gz"
-    sha256 "2e4e42ec0ba2fff54b0d244d0b1623e86057673e57bafe72dda59c64bd5dee8b"
+    url "https://files.pythonhosted.org/packages/16/0f/861e168fc813c56a78b35f3c30d91c6757d1fd185af1110f1aec784b35d0/argcomplete-3.6.2.tar.gz"
+    sha256 "d0519b1bc867f5f4f4713c41ad0aba73a4a5f007449716b16f385f2166dc6adf"
   end
 
   resource "certifi" do
@@ -45,17 +45,12 @@ class Galatea < Formula
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/aa/63/e53da845320b757bf29ef6a9062f5c669fe997973f966045cb019c3f4b66/urllib3-2.3.0.tar.gz"
-    sha256 "f8c5449b3cf0861679ce7e0503c7b44b5ec981bec0d1d3795a07f1ba96f0204d"
+    url "https://files.pythonhosted.org/packages/8a/78/16493d9c386d8e60e442a35feac5e00f0913c0f4b7c217c11e8ec2ff53e0/urllib3-2.4.0.tar.gz"
+    sha256 "414bc6535b787febd7567804cc015fee39daab8ad86268f1310a9250697de466"
   end
 
   def install
     virtualenv_install_with_resources
-    generate_completions_from_executable(
-      libexec/"bin/register-python-argcomplete", "galatea",
-      base_name:              "galatea",
-      shell_parameter_format: :arg
-    )
   end
 
   test do
