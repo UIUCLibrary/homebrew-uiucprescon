@@ -6,18 +6,23 @@ class Galatea < Formula
 
   desc "Used for cleaning up metadata used by UIUC metadata"
   homepage "https://github.com/UIUCLibrary/galatea"
-  url "https://github.com/UIUCLibrary/galatea/archive/refs/tags/v0.3.0.tar.gz"
-  sha256 "352d009f12fd95a8559cedb59c25ab24e83d77cbb32fde2c921ed9e22e3d9112"
+  url "https://github.com/UIUCLibrary/galatea/archive/refs/tags/v0.3.2.tar.gz"
+  sha256 "1efe2c1dfbde90b023c565ed3ecf998c4853b63da6686bfce357bd022d703180"
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma: "2d1d8275afa49dcc4d26444330bfcb0dfb8f6553739889ea99b7726a2b73e762"
-    sha256 cellar: :any_skip_relocation, sonoma:       "b5c42bd6f34be1062775fb7f9be1ce060a2f11a8dc477828fe33f83eb47d4785"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma: "4e115878cd291ce1ec8c5a255077f71c81c01bedda444ae8c705c0255d93461a"
+    sha256 cellar: :any_skip_relocation, sonoma:       "15722e24cc56f04c0310831ea62c9b54b8880ce335f716b35a102f5d9de7b501"
   end
 
   depends_on "python@3.13"
+
+  resource "argcomplete" do
+    url "https://files.pythonhosted.org/packages/16/0f/861e168fc813c56a78b35f3c30d91c6757d1fd185af1110f1aec784b35d0/argcomplete-3.6.2.tar.gz"
+    sha256 "d0519b1bc867f5f4f4713c41ad0aba73a4a5f007449716b16f385f2166dc6adf"
+  end
 
   resource "certifi" do
     url "https://files.pythonhosted.org/packages/1c/ab/c9f1e32b7b1bf505bf26f0ef697775960db7932abeb7b516de930ba2705f/certifi-2025.1.31.tar.gz"
@@ -40,8 +45,8 @@ class Galatea < Formula
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/aa/63/e53da845320b757bf29ef6a9062f5c669fe997973f966045cb019c3f4b66/urllib3-2.3.0.tar.gz"
-    sha256 "f8c5449b3cf0861679ce7e0503c7b44b5ec981bec0d1d3795a07f1ba96f0204d"
+    url "https://files.pythonhosted.org/packages/8a/78/16493d9c386d8e60e442a35feac5e00f0913c0f4b7c217c11e8ec2ff53e0/urllib3-2.4.0.tar.gz"
+    sha256 "414bc6535b787febd7567804cc015fee39daab8ad86268f1310a9250697de466"
   end
 
   def install
