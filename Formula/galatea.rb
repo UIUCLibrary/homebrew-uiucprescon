@@ -13,8 +13,8 @@ class Galatea < Formula
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma: "4e115878cd291ce1ec8c5a255077f71c81c01bedda444ae8c705c0255d93461a"
-    sha256 cellar: :any_skip_relocation, sonoma:       "15722e24cc56f04c0310831ea62c9b54b8880ce335f716b35a102f5d9de7b501"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma: "e1a6317b3e38403ca6d3ef70d11291d03cfb34bec7ec02e9fd12e5a01138cb00"
+    sha256 cellar: :any_skip_relocation, sonoma:       "1b01f5edb2860208a779a053e8bb2f3ec20a78fd1213467fc1b08b9fd840113d"
   end
 
   depends_on "python@3.13"
@@ -51,6 +51,12 @@ class Galatea < Formula
 
   def install
     virtualenv_install_with_resources
+
+    generate_completions_from_executable(
+      libexec/"bin/register-python-argcomplete", "cz",
+      base_name:              "cz",
+      shell_parameter_format: :arg
+    )
   end
 
   test do
