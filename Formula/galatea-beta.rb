@@ -10,6 +10,13 @@ class GalateaBeta < Formula
   sha256 "ebdc79e807b3c0cf1041297dfaad9dd51ca179072a9562856600fbc382c10ca9"
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
+
+  bottle do
+    root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1e30fc4c2cc69367e21b1fc96743bfb9276f62e6ca99641a98ae668dcbab7103"
+    sha256 cellar: :any_skip_relocation, sonoma:        "563b44a069bf903d4f0b4e92ea4979cf98195f66daa6a2841199992d3f3e0d5c"
+  end
+
   depends_on "python@3.13"
   conflicts_with "uiuclibrary/uiucprescon/galatea",
                  because: "galatea beta and galatea formula share same command line application"
