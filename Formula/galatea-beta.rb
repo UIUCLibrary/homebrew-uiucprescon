@@ -1,24 +1,17 @@
 # typed: true
 # frozen_string_literal: true
 
-class Galatea < Formula
+class GalateaBeta < Formula
   include Language::Python::Virtualenv
 
-  desc "Used for cleaning up metadata used by UIUC metadata"
+  desc "Used for cleaning up metadata used by UIUC metadata. Prerelease"
   homepage "https://github.com/UIUCLibrary/galatea"
-  url "https://github.com/UIUCLibrary/galatea/archive/refs/tags/v0.3.2.tar.gz"
-  sha256 "1efe2c1dfbde90b023c565ed3ecf998c4853b63da6686bfce357bd022d703180"
+  url "https://github.com/UIUCLibrary/galatea/archive/refs/tags/v0.4.0b0.tar.gz"
+  sha256 "ebdc79e807b3c0cf1041297dfaad9dd51ca179072a9562856600fbc382c10ca9"
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
-
-  bottle do
-    root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma: "7d9d0656bdf859270c96eb578e8341d40fc303e71a039523bed3ca865162ad02"
-    sha256 cellar: :any_skip_relocation, sonoma:       "377d4777c9b1a246ff9454780b82e812fb125e7e3c874c4cac826cce848bccbe"
-  end
-
   depends_on "python@3.13"
-  conflicts_with "uiuclibrary/uiucprescon/galatea-beta",
+  conflicts_with "uiuclibrary/uiucprescon/galatea",
                  because: "galatea beta and galatea formula share same command line application"
 
   resource "argcomplete" do
@@ -27,13 +20,13 @@ class Galatea < Formula
   end
 
   resource "certifi" do
-    url "https://files.pythonhosted.org/packages/1c/ab/c9f1e32b7b1bf505bf26f0ef697775960db7932abeb7b516de930ba2705f/certifi-2025.1.31.tar.gz"
-    sha256 "3d5da6925056f6f18f119200434a4780a94263f10d1c21d032a6f6b2baa20651"
+    url "https://files.pythonhosted.org/packages/e8/9e/c05b3920a3b7d20d3d3310465f50348e5b3694f4f88c6daf736eef3024c4/certifi-2025.4.26.tar.gz"
+    sha256 "0a816057ea3cdefcef70270d2c515e4506bbc954f417fa5ade2021213bb8f0c6"
   end
 
   resource "charset-normalizer" do
-    url "https://files.pythonhosted.org/packages/16/b0/572805e227f01586461c80e0fd25d65a2115599cc9dad142fee4b747c357/charset_normalizer-3.4.1.tar.gz"
-    sha256 "44251f18cd68a75b56585dd00dae26183e102cd5e0f9f1466e6df5da2ed64ea3"
+    url "https://files.pythonhosted.org/packages/e4/33/89c2ced2b67d1c2a61c19c6751aa8902d46ce3dacb23600a283619f5a12d/charset_normalizer-3.4.2.tar.gz"
+    sha256 "5baececa9ecba31eff645232d59845c07aa030f0c81ee70184a90d35099a0e63"
   end
 
   resource "idna" do
