@@ -17,6 +17,7 @@ class GalateaBeta < Formula
     sha256 cellar: :any_skip_relocation, sonoma:        "563b44a069bf903d4f0b4e92ea4979cf98195f66daa6a2841199992d3f3e0d5c"
   end
 
+  deprecate! date: "2025-07-24", because: :repo_archived, replacement_formula: "galatea"
   depends_on "python@3.13"
   conflicts_with "uiuclibrary/uiucprescon/galatea",
                  because: "galatea beta and galatea formula share same command line application"
