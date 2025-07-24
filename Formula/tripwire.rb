@@ -13,8 +13,8 @@ class Tripwire < Formula
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma: "1757f8709f429e246f3901d44c34a8a47813c04439a96169b20e20fb2e4e19d5"
-    sha256 cellar: :any_skip_relocation, sonoma:       "db101c104ffea9e0fc7c06f807331b858148c3abcd135233c61e45f9fdea8eb7"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma: "7f9c5c2ec15495484b756d3718a1dd2bab6770a52391fb3f35c8cdc10f19e7f6"
+    sha256 cellar: :any_skip_relocation, sonoma:       "1fb075177736c01ed44b55bfc014d98f3ca22207cff5384783c826521d532dfc"
   end
 
   depends_on "python@3.13"
