@@ -168,7 +168,7 @@ pipeline{
                                                       cp -r Formula/* $(brew --repo $HOMEBREW_BUILD_TAP)/Formula/
                                                    '''
                                                 try{
-                                                    sh '''brew install --build-bottle --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
+                                                    sh '''brew install --build-bottle --verbose --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
                                                           brew test "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
                                                           brew bottle --json  --root-url=${BOTTLE_URL_ROOT}/ "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
                                                        '''
