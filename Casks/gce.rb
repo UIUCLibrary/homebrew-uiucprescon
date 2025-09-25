@@ -19,7 +19,7 @@ cask "gce" do
     # skip "No version information available"
   end
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: ">= :big_sur"
 
   app "Galatea Configuration Editor.app"
 
