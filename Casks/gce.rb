@@ -1,10 +1,10 @@
 cask "gce" do
-  version "0.0.1"
+  version "0.0.2"
   arch arm: "arm64",
        intel: "x86_64"
 
-  sha256 intel: "a354a51e9a6398afc30c000de4417e916765c523bd1c90bad128e43029ce42af",
-         arm: "1353dc677fbe5a9c5da9bcca3b4e698b0754b96a572618b7798c7764bff8a0b6"
+  sha256 intel: "3e6e1c95c30bf74b165faa3793f5083fe4177f8fb4e0dd54984a1bf6fc0b8281",
+         arm: "fdc042a56acd78bd4186d059fe3168c1a9598deb29a7d0231f7980d8990e7175"
 
   url "https://nexus.library.illinois.edu/repository/prescon-dist/gce/Galatea%20Config%20Editor-#{version}-macos-#{arch}.dmg",
       verified: "nexus.library.illinois.edu/repository/prescon-dist/gce"
