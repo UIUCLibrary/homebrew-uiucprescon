@@ -6,15 +6,15 @@ class Tripwire < Formula
 
   desc "Used for helping out AV preservation"
   homepage "https://github.com/UIUCLibrary/tripwire"
-  url "https://github.com/UIUCLibrary/tripwire/releases/download/v0.3.5/uiucprescon_tripwire-0.3.5.tar.gz"
-  sha256 "a2566296a1d10e50a97fe58846af031448b1abbae2d8074ae72e5e5637d8a052"
+  url "https://github.com/UIUCLibrary/tripwire/releases/download/v0.3.6/uiucprescon_tripwire-0.3.6.tar.gz"
+  sha256 "21a11faa0378c5d87c15a41c93f4c0858913e9b0a44df0c5f45fcbd4eaf13587"
   license "NCSA"
   head "https://github.com/UIUCLibrary/tripwire.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma: "766c265c80e553af1054164b818a3f24e7d59c352dc6985fa212bf35154a2e67"
-    sha256 cellar: :any_skip_relocation, sonoma:       "5c9ed435256fc0ae3ed4b7a69ecb83a291b800ab128f4d4512281c85afc1f889"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1be2b581af38f9249d236d9f475767d4ec7e6deb5b753bf2805d40a4330dbc35"
+    sha256 cellar: :any_skip_relocation, sonoma:        "83188c07abae564d2aaeb44259d31f0003fa20d3f18c855737125fa934a2aa03"
   end
 
   depends_on "python@3.13"
