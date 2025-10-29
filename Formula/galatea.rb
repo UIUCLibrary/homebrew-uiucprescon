@@ -6,15 +6,15 @@ class Galatea < Formula
 
   desc "Used for cleaning up metadata used by UIUC metadata"
   homepage "https://github.com/UIUCLibrary/galatea"
-  url "https://github.com/UIUCLibrary/galatea/archive/refs/tags/v0.4.2.tar.gz"
-  sha256 "449812e0c1ad6a7ecae225539adfc6e01dc19915c5b4181160f54df76a6dc96d"
+  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.5.0/galatea-0.5.0.tar.gz"
+  sha256 "0401f6ea31001789098925b9989a271a875710e0bb932819cc5ad29ecac2eae9"
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "3459e08d2eae6ec146bf7f40b8d37b0508791bda63980c490c8eeea5c3818ffd"
-    sha256 cellar: :any_skip_relocation, sonoma:        "7605a0e0e089ac6af885533091a7517ec84dd4724dfa03b2fb25681cffe24ce0"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "ebac925360a458c1010bd1ecc86f371384c4b34e01d01f6a7a8a915b9c31ab63"
+    sha256 cellar: :any_skip_relocation, sonoma:        "0126175ff66a5726e89d0cf1be6e5584aaaa6c482ecb938c4a4532fa778bed99"
   end
 
   depends_on "python@3.13"
