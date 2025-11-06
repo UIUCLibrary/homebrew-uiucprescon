@@ -7,7 +7,7 @@ class Galatea < Formula
   desc "Used for cleaning up metadata used by UIUC metadata"
   homepage "https://github.com/UIUCLibrary/galatea"
   url "https://github.com/UIUCLibrary/galatea/releases/download/v0.5.1/galatea-0.5.1.tar.gz"
-  sha256 "c0cef3c92c27fa764bfab1ccaf674e0a3a67c6cfc917b378bb551b0ee7a26013"
+  sha256 "cb48c4a6fe27d0f0139f50cc6811e6db047d42e8847a9992a28b4fd7d28bb190"
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
