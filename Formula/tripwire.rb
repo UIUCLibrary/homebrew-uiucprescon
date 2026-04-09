@@ -6,22 +6,16 @@ class Tripwire < Formula
 
   desc "Used for helping out AV preservation"
   homepage "https://github.com/UIUCLibrary/tripwire"
-  url "https://github.com/UIUCLibrary/tripwire/releases/download/v0.3.6/uiucprescon_tripwire-0.3.6.tar.gz"
-  sha256 "21a11faa0378c5d87c15a41c93f4c0858913e9b0a44df0c5f45fcbd4eaf13587"
+  url "https://github.com/UIUCLibrary/tripwire/releases/download/v0.3.7/uiucprescon_tripwire-0.3.7.tar.gz"
+  sha256 "b77faa6c587717164069a1f21f2ebd5ad9f561ac6da1375512625361b3d0446e"
   license "NCSA"
   head "https://github.com/UIUCLibrary/tripwire.git", branch: "main"
-
-  bottle do
-    root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1be2b581af38f9249d236d9f475767d4ec7e6deb5b753bf2805d40a4330dbc35"
-    sha256 cellar: :any_skip_relocation, sonoma:        "83188c07abae564d2aaeb44259d31f0003fa20d3f18c855737125fa934a2aa03"
-  end
 
   depends_on "python@3.13"
 
   resource "argcomplete" do
-    url "https://files.pythonhosted.org/packages/38/61/0b9ae6399dd4a58d8c1b1dc5a27d6f2808023d0b5dd3104bb99f45a33ff6/argcomplete-3.6.3.tar.gz"
-    sha256 "62e8ed4fd6a45864acc8235409461b72c9a28ee785a2011cc5eb78318786c89c"
+    url "https://files.pythonhosted.org/packages/16/0f/861e168fc813c56a78b35f3c30d91c6757d1fd185af1110f1aec784b35d0/argcomplete-3.6.2.tar.gz"
+    sha256 "d0519b1bc867f5f4f4713c41ad0aba73a4a5f007449716b16f385f2166dc6adf"
   end
 
   resource "pymediainfo" do
