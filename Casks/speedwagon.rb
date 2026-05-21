@@ -9,8 +9,6 @@ cask "speedwagon" do
   name "Speedwagon"
   desc "Collection of tools and workflows for DS"
   homepage "https://github.com/UIUCLibrary/Speedwagon"
-  conflicts_with formula: "speedwagon",
-                 cask: "speedwagon-beta"
   app "Speedwagon.app"
 
   livecheck do
