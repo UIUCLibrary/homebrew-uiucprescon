@@ -52,7 +52,9 @@ pipeline{
                         lock("homebrew ${env.NODE_NAME}"){
                             script{
                                 try{
-                                    sh(label: 'Update homebrew', script: 'brew update')
+                                    lock("${NODE_NAME}_homebrew_update"){
+                                        sh(label: 'Update homebrew', script: 'brew update')
+                                    }
                                     sh(label: 'Create a testing tap',
                                        script: """brew tap-new ${env.TAP_USERNAME}/${env.TAP_NAME} --no-git"""
                                     )
@@ -87,7 +89,9 @@ pipeline{
                         lock("homebrew ${env.NODE_NAME}"){
                             script{
                                 try{
-                                    sh(label: 'Update homebrew', script: 'brew update')
+                                    lock("${NODE_NAME}_homebrew_update"){
+                                        sh(label: 'Update homebrew', script: 'brew update')
+                                    }
                                     sh(label: 'Create a testing tap',
                                        script: 'brew tap-new $TAP_USERNAME/$TAP_NAME --no-git'
                                     )
