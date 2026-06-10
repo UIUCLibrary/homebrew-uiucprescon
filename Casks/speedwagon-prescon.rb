@@ -1,10 +1,10 @@
 cask "speedwagon-prescon" do
-  version "0.3.2b5"
-  sha256 arm: "636f83d858eae6c0a039d511ced8230688e4ca2b864c1fab08d09674eadde8fa",
-         intel: "1a8d9276cf103d88d2b6f63d77e87f9fbc01da03d696e85808cdad41a6d9e2f5"
+  version "0.3.2b6"
+  sha256 arm: "4400bfc2917a2168e0172e644cb5f156bbd918153dec1407d29f734ee3a1d446",
+         intel: "5aad48aa79433f9f7d91a7fb328a0d4797515325b80a7e8fb2c47b6ff933cf67"
   arch arm: "arm64",
        intel: "x86_64"
-  url "https://nexus.library.illinois.edu/repository/prescon-dist/speedwagon_uiuc/#{version}/Speedwagon%20(UIUC%20Prescon%20Edition)-0.3.2.b5-macos-#{arch}.dmg",
+  url "https://nexus.library.illinois.edu/repository/prescon-dist/speedwagon_uiuc/#{version}/Speedwagon%20(UIUC%20Prescon%20Edition)-0.3.2.b6-macos-#{arch}.dmg",
       verified: "nexus.library.illinois.edu/repository/prescon-dist/speedwagon_uiuc"
   name "Speedwagon"
   desc "Collection of tools and workflows for DS"
