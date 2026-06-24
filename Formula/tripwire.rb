@@ -6,22 +6,23 @@ class Tripwire < Formula
 
   desc "Used for helping out AV preservation"
   homepage "https://github.com/UIUCLibrary/tripwire"
-  url "https://github.com/UIUCLibrary/tripwire/releases/download/v0.3.6/uiucprescon_tripwire-0.3.6.tar.gz"
-  sha256 "21a11faa0378c5d87c15a41c93f4c0858913e9b0a44df0c5f45fcbd4eaf13587"
+  url "https://github.com/UIUCLibrary/tripwire/releases/download/v0.3.8/uiucprescon_tripwire-0.3.8.tar.gz"
+  sha256 "a00be88de601d7c5b0d29237a342a2ea55726d8b169faefc79102ec965a2202d"
   license "NCSA"
   head "https://github.com/UIUCLibrary/tripwire.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "1be2b581af38f9249d236d9f475767d4ec7e6deb5b753bf2805d40a4330dbc35"
-    sha256 cellar: :any_skip_relocation, sonoma:        "83188c07abae564d2aaeb44259d31f0003fa20d3f18c855737125fa934a2aa03"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe: "137ca305cafcd5d3f12e6da5d534e6451dbca8e4204cfeb44e1f330ae668b6a5"
+    sha256 cellar: :any_skip_relocation, sonoma:      "0c0e33a4804ec4fd9b070b3075ac8a2492be5bdc02693a3a059f111e97bc88a8"
   end
 
-  depends_on "python@3.13"
+  depends_on "conan" => :build
+  depends_on "python@3.14"
 
   resource "argcomplete" do
-    url "https://files.pythonhosted.org/packages/38/61/0b9ae6399dd4a58d8c1b1dc5a27d6f2808023d0b5dd3104bb99f45a33ff6/argcomplete-3.6.3.tar.gz"
-    sha256 "62e8ed4fd6a45864acc8235409461b72c9a28ee785a2011cc5eb78318786c89c"
+    url "https://files.pythonhosted.org/packages/16/0f/861e168fc813c56a78b35f3c30d91c6757d1fd185af1110f1aec784b35d0/argcomplete-3.6.2.tar.gz"
+    sha256 "d0519b1bc867f5f4f4713c41ad0aba73a4a5f007449716b16f385f2166dc6adf"
   end
 
   resource "pymediainfo" do
@@ -35,11 +36,13 @@ class Tripwire < Formula
   end
 
   resource "uiucprescon-pymediaconch" do
-    url "https://github.com/UIUCLibrary/uiucprescon.pymediaconch/releases/download/v0.1.1/uiucprescon_pymediaconch-0.1.1.tar.gz"
-    sha256 "c7b3217e59aab7d772352baa230f1628dccaf66ab8f4806840e11feab4ca55fd"
+    url "https://github.com/UIUCLibrary/uiucprescon.pymediaconch/releases/download/v0.1.2/uiucprescon_pymediaconch-0.1.2.tar.gz"
+    sha256 "97cd9b95d521b6541359b34c9097a796cbeb69e4a0aec80786ffaa34722c4390"
   end
 
   def install
+    ENV["CONAN_HOME"] = buildpath
+    system "conan", "profile", "detect"
     virtualenv_install_with_resources
   end
 
