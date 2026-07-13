@@ -6,18 +6,24 @@ class Galatea < Formula
 
   desc "Used for cleaning up metadata used by UIUC metadata"
   homepage "https://github.com/UIUCLibrary/galatea"
-  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.5.2/galatea-0.5.2.tar.gz"
-  sha256 "13bd4cfaf2f1222a4d0816a738e23bdfacc6e2ad52ad54fad33c58ee589315cf"
+  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.6.0/galatea-0.6.0.tar.gz"
+  sha256 "9b84d7e9cdacc357e6ce6c9fdbb0902d6abdeac382818fe694ef405c415f4d35"
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_tahoe: "eed712f8b12336c5b002249643297e7bd9e10e00372de044d5a510f196870f31"
-    sha256 cellar: :any_skip_relocation, sonoma:      "34093b37b28b882603ab139ccdcf02070c9c3141c23c85573b59f7d8cdf13154"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe: "45d4ca152a03e9b02f087c73d2f0b7fa3d08ed08fb39c534ba6216de268d384f"
+    sha256 cellar: :any_skip_relocation, sonoma:      "aae35dd322a915c3c6c4cd715d15b37a75500d6b6d9e5dc5a2231f55aaa9cb1e"
   end
 
-  depends_on "python@3.13"
+  depends_on "libxml2"
+  depends_on "libxslt"
+  depends_on "libyaml"
+  depends_on "pyside" # This installs PySide6 bindings globally into Homebrew
+  depends_on "python@3.14"
+  depends_on "qt"
+
   conflicts_with "uiuclibrary/uiucprescon/galatea-beta",
                  because: "galatea beta and galatea formula share same command line application"
 
@@ -46,9 +52,24 @@ class Galatea < Formula
     sha256 "0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d"
   end
 
+  resource "lxml" do
+    url "https://files.pythonhosted.org/packages/28/30/9abc9e34c657c33834eaf6cd02124c61bdf5944d802aa48e69be8da3585d/lxml-6.1.0.tar.gz"
+    sha256 "bfd57d8008c4965709a919c3e9a98f76c2c7cb319086b3d26858250620023b13"
+  end
+
   resource "markupsafe" do
     url "https://files.pythonhosted.org/packages/7e/99/7690b6d4034fffd95959cbe0c02de8deb3098cc577c67bb6a24fe5d7caa7/markupsafe-3.0.3.tar.gz"
     sha256 "722695808f4b6457b320fdc131280796bdceb04ab50fe1795cd540799ebe1698"
+  end
+
+  resource "pluggy" do
+    url "https://files.pythonhosted.org/packages/f9/e2/3e91f31a7d2b083fe6ef3fa267035b518369d9511ffab804f839851d2779/pluggy-1.6.0.tar.gz"
+    sha256 "7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3"
+  end
+
+  resource "pyyaml" do
+    url "https://files.pythonhosted.org/packages/05/8e/961c0007c59b8dd7729d542c61a4d537767a59645b82a0b521206e1e25c2/pyyaml-6.0.3.tar.gz"
+    sha256 "d76623373421df22fb4cf8817020cbb7ef15c725b9d5e45f17e189bfc384190f"
   end
 
   resource "requests" do
@@ -56,9 +77,24 @@ class Galatea < Formula
     sha256 "18817f8c57c6263968bc123d237e3b8b08ac046f5456bd1e307ee8f4250d3517"
   end
 
+  resource "speedwagon" do
+    url "https://nexus.library.illinois.edu/repository/uiuc_prescon_python/packages/speedwagon/0.4.0b23/speedwagon-0.4.0b23.tar.gz"
+    sha256 "93083edb9de37524ce0591242b4f1f512edfaa7d4f55921bbbf0a3cad6db55b5"
+  end
+
+  resource "tomli" do
+    url "https://files.pythonhosted.org/packages/22/de/48c59722572767841493b26183a0d1cc411d54fd759c5607c4590b6563a6/tomli-2.4.1.tar.gz"
+    sha256 "7c7e1a961a0b2f2472c1ac5b69affa0ae1132c39adcb67aba98568702b9cc23f"
+  end
+
   resource "tomlkit" do
     url "https://files.pythonhosted.org/packages/51/db/03eaf4331631ef6b27d6e3c9b68c54dc6f0d63d87201fed600cc409307fd/tomlkit-0.15.0.tar.gz"
     sha256 "7d1a9ecba3086638211b13814ea79c90dd54dd11993564376f3aa92271f5c7a3"
+  end
+
+  resource "typing-extensions" do
+    url "https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f/typing_extensions-4.15.0.tar.gz"
+    sha256 "0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466"
   end
 
   resource "urllib3" do
@@ -67,7 +103,20 @@ class Galatea < Formula
   end
 
   def install
-    virtualenv_install_with_resources
+    venv = virtualenv_create(libexec, "python3.14")
+    site_packages = Language::Python.site_packages("python3.14")
+
+    ohai "Linking global PySide6 into virtual environment"
+    mkdir_p "#{libexec}/lib/#{site_packages}"
+    ln_s "#{HOMEBREW_PREFIX}/#{site_packages}/PySide6", "#{libexec}/lib/#{site_packages}/PySide6"
+    ln_s "#{HOMEBREW_PREFIX}/#{site_packages}/shiboken6", "#{libexec}/lib/#{site_packages}/shiboken6"
+
+    # Install remaining additional dependencies inside the virtualenv
+    resources.each do |r|
+      venv.pip_install r
+    end
+
+    venv.pip_install_and_link buildpath
 
     generate_completions_from_executable(
       libexec/"bin/register-python-argcomplete", "galatea",
@@ -79,5 +128,8 @@ class Galatea < Formula
   test do
     system bin/"galatea", "--help"
     system bin/"galatea", "--version"
+    system bin/"galatea-gui", "--help"
+    system bin/"galatea-gui", "--version"
+    system bin/"galatea-gui", "info"
   end
 end
