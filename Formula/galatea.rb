@@ -6,21 +6,21 @@ class Galatea < Formula
 
   desc "Used for cleaning up metadata used by UIUC metadata"
   homepage "https://github.com/UIUCLibrary/galatea"
-  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.6.0/galatea-0.6.0.tar.gz"
-  sha256 "9b84d7e9cdacc357e6ce6c9fdbb0902d6abdeac382818fe694ef405c415f4d35"
+  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.6.1/galatea-0.6.1.tar.gz"
+  sha256 "229d826ef0ad96bcb15d792531061e380fec0b6ee2219d3a6f8a9c7d1a5ed0b0"
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_tahoe: "45d4ca152a03e9b02f087c73d2f0b7fa3d08ed08fb39c534ba6216de268d384f"
-    sha256 cellar: :any_skip_relocation, sonoma:      "aae35dd322a915c3c6c4cd715d15b37a75500d6b6d9e5dc5a2231f55aaa9cb1e"
+    sha256 cellar: :any, arm64_tahoe: "8713d1cdc0b6a512836432eb8d88336276c647f3bc09e20848527d32c0bc4533"
+    sha256 cellar: :any, sonoma:      "5924f2a6b046e168b46a645bb41007d36f16680a898c35dbda68bb054061584c"
   end
 
   depends_on "libxml2"
   depends_on "libxslt"
   depends_on "libyaml"
-  depends_on "pyside" # This installs PySide6 bindings globally into Homebrew
+  depends_on "pyside"
   depends_on "python@3.14"
   depends_on "qt"
 
