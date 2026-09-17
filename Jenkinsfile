@@ -50,47 +50,44 @@ pipeline{
                     }
                     stages{
                         stage('Updating homebrew'){
-                            options {
-                                lock(resource: "${env.NODE_NAME}_homebrew_update", quantity: 1)
-
-                            }
                             steps{
-                                script{
-                                    lock(resource: "homebrew ${env.NODE_NAME}", quantity: 1, skipIfLocked: true){
-                                        sh(label: 'Update homebrew', script: 'brew update')
+                                lock(extra: [[resource: "${env.NODE_NAME}_homebrew_update"]], quantity: 1, reason: 'Don\'t run brew update at the same time', resource: "homebrew ${env.NODE_NAME}", skipIfLocked: true){
+                                    script{
+                                        lock(resource: "homebrew ${env.NODE_NAME}", quantity: 1, skipIfLocked: true){
+                                            sh(label: 'Update homebrew', script: 'brew update')
+                                        }
                                     }
                                 }
                             }
                         }
                         stage('Auditing'){
-                            options {
-                                lock(resource: "homebrew ${env.NODE_NAME}", quantity: 1)
-                            }
                             steps{
-                                script{
-                                    try{
-                                        sh(label: 'Create a testing tap',
-                                           script: """brew tap-new ${env.TAP_USERNAME}/${env.TAP_NAME} --no-git"""
-                                        )
-                                        sh(label: 'Adding homebrew formula files to test tap',
-                                           script: "cp -r Formula/* ${env.TAP_PATH}/Formula"
-                                        )
-                                        parallel(
-                                            findFiles(glob: 'Formula/*.rb').collectEntries{
-                                                [
-                                                    "${it}",
-                                                    {
-                                                       withEnv(["file=${it}"]) {
-                                                          catchError(buildResult: 'UNSTABLE', message: "${env.file} failed audit", stageResult: 'UNSTABLE') {
-                                                             sh(label: "Auditing ${env.file}", script: "brew audit --verbose ${params.AUDIT_FORMULA_ONLINE_OPTION ? '--online' :''} --formula ${env.TAP_USERNAME}/${env.TAP_NAME}/\$(basename \${file%.rb})")
-                                                          }
-                                                       }
-                                                    }
-                                                ]
-                                            }
-                                        )
-                                    } finally {
-                                       sh(label: 'Removing testing tap', script: 'brew untap --verbose --force $TAP_USERNAME/$TAP_NAME')
+                                lock(resource: "homebrew ${env.NODE_NAME}", quantity: 1){
+                                    script{
+                                        try{
+                                            sh(label: 'Create a testing tap',
+                                               script: """brew tap-new ${env.TAP_USERNAME}/${env.TAP_NAME} --no-git"""
+                                            )
+                                            sh(label: 'Adding homebrew formula files to test tap',
+                                               script: "cp -r Formula/* ${env.TAP_PATH}/Formula"
+                                            )
+                                            parallel(
+                                                findFiles(glob: 'Formula/*.rb').collectEntries{
+                                                    [
+                                                        "${it}",
+                                                        {
+                                                           withEnv(["file=${it}"]) {
+                                                              catchError(buildResult: 'UNSTABLE', message: "${env.file} failed audit", stageResult: 'UNSTABLE') {
+                                                                 sh(label: "Auditing ${env.file}", script: "brew audit --verbose ${params.AUDIT_FORMULA_ONLINE_OPTION ? '--online' :''} --formula ${env.TAP_USERNAME}/${env.TAP_NAME}/\$(basename \${file%.rb})")
+                                                              }
+                                                           }
+                                                        }
+                                                    ]
+                                                }
+                                            )
+                                        } finally {
+                                           sh(label: 'Removing testing tap', script: 'brew untap --verbose --force $TAP_USERNAME/$TAP_NAME')
+                                        }
                                     }
                                 }
                             }
@@ -107,45 +104,41 @@ pipeline{
                     }
                     stages{
                         stage('Updating homebrew'){
-                            options {
-                                lock(resource: "${env.NODE_NAME}_homebrew_update", quantity: 1)
-                            }
                             steps{
-                                lock(resource: "homebrew ${env.NODE_NAME}", quantity: 1, skipIfLocked: true){
+                                 lock(extra: [[resource: "${env.NODE_NAME}_homebrew_update"]], quantity: 1, reason: 'Don\'t run brew update at the same time', resource: "homebrew ${env.NODE_NAME}", skipIfLocked: true){
                                     sh(label: 'Update homebrew', script: 'brew update')
                                 }
                             }
                         }
                         stage('Auditing'){
-                            options {
-                                lock(resource: "homebrew ${env.NODE_NAME}", quantity: 1)
-                            }
                             steps{
-                                script{
-                                    try{
-                                        sh(label: 'Create a testing tap',
-                                           script: 'brew tap-new $TAP_USERNAME/$TAP_NAME --no-git'
-                                        )
-                                        sh(
-                                            label: 'Adding homebrew casks files to test tap',
-                                            script: "ln -s ${env.WORKSPACE}/Casks ${env.TAP_PATH}/Casks"
-                                        )
-                                        parallel(
-                                            findFiles(glob: 'Casks/*.rb').collectEntries{
-                                                [
-                                                    "${it}",
-                                                    {
-                                                        withEnv(["file=${it}"]) {
-                                                            catchError(buildResult: 'UNSTABLE', message: "${env.file} failed audit", stageResult: 'UNSTABLE') {
-                                                                sh(label: "Auditing ${env.file}", script: "brew audit --verbose ${params.AUDIT_FORMULA_ONLINE_OPTION ? '--online' :''} --cask ${env.TAP_USERNAME}/${env.TAP_NAME}/\$(basename \${file%.rb})")
+                                lock(resource: "homebrew ${env.NODE_NAME}", quantity: 1){
+                                    script{
+                                        try{
+                                            sh(label: 'Create a testing tap',
+                                               script: 'brew tap-new $TAP_USERNAME/$TAP_NAME --no-git'
+                                            )
+                                            sh(
+                                                label: 'Adding homebrew casks files to test tap',
+                                                script: "ln -s ${env.WORKSPACE}/Casks ${env.TAP_PATH}/Casks"
+                                            )
+                                            parallel(
+                                                findFiles(glob: 'Casks/*.rb').collectEntries{
+                                                    [
+                                                        "${it}",
+                                                        {
+                                                            withEnv(["file=${it}"]) {
+                                                                catchError(buildResult: 'UNSTABLE', message: "${env.file} failed audit", stageResult: 'UNSTABLE') {
+                                                                    sh(label: "Auditing ${env.file}", script: "brew audit --verbose ${params.AUDIT_FORMULA_ONLINE_OPTION ? '--online' :''} --cask ${env.TAP_USERNAME}/${env.TAP_NAME}/\$(basename \${file%.rb})")
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                ]
-                                            }
-                                        )
-                                    } finally {
-                                        sh(label: 'Removing testing tap', script: 'brew untap --force $TAP_USERNAME/$TAP_NAME')
+                                                    ]
+                                                }
+                                            )
+                                        } finally {
+                                            sh(label: 'Removing testing tap', script: 'brew untap --force $TAP_USERNAME/$TAP_NAME')
+                                        }
                                     }
                                 }
                             }
