@@ -149,62 +149,54 @@ pipeline{
 // fixme: Make sure that this uploaded as file name not local file name
             stages{
                 stage('Build Bottles'){
-                    matrix {
-                        axes {
-                            axis {
-                                name 'ARCHITECTURE'
-                                values 'arm64','x86_64'
+                    stages {
+                        stage('Build ARM64 Bottle') {
+                            agent {
+                                label "mac && homebrew && arm64"
                             }
-                        }
-                        stages {
-                            stage('Build Bottle') {
-                                agent {
-                                    label "mac && homebrew && ${ARCHITECTURE}"
-                                }
-                                steps{
-                                    withEnv([
-                                        "HOMEBREW_FORMULA_FILE=${HOMEBREW_FORMULA_FILE}",
-                                        "BOTTLE_URL_ROOT=${BOTTLE_URL_ROOT}"
-                                        ]) {
-                                        script{
+                            steps{
+                                withEnv([
+                                    "HOMEBREW_FORMULA_FILE=${HOMEBREW_FORMULA_FILE}",
+                                    "BOTTLE_URL_ROOT=${BOTTLE_URL_ROOT}"
+                                    ]) {
+                                    script{
+                                        try{
+                                            sh '''brew tap-new $HOMEBREW_BUILD_TAP --no-git
+                                                  cp -r Formula/* $(brew --repo $HOMEBREW_BUILD_TAP)/Formula/
+                                               '''
                                             try{
-                                                sh '''brew tap-new $HOMEBREW_BUILD_TAP --no-git
-                                                      cp -r Formula/* $(brew --repo $HOMEBREW_BUILD_TAP)/Formula/
+                                                sh '''brew install --build-bottle --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE" --verbose
+                                                      brew test "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
+                                                      brew bottle --json  --root-url=${BOTTLE_URL_ROOT}/ "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
                                                    '''
-                                                try{
-                                                    sh '''brew install --build-bottle --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE" --verbose
-                                                          brew test "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
-                                                          brew bottle --json  --root-url=${BOTTLE_URL_ROOT}/ "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
-                                                       '''
-                                                    archiveArtifacts(artifacts: '*.bottle.tar.gz,*.bottle.json', allowEmptyArchive: true)
-                                                    def stashName = "bottle-${ARCHITECTURE}"
-                                                    stash includes: '*.bottle.tar.gz,*.bottle.json', name: stashName
-                                                    bottlesBuild << stashName
-                                                } finally{
-                                                    sh 'brew uninstall --force --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"'
-                                                }
-                                            } finally {
-                                                sh 'brew untap --verbose --force $HOMEBREW_BUILD_TAP'
+                                                archiveArtifacts(artifacts: '*.bottle.tar.gz,*.bottle.json', allowEmptyArchive: true)
+                                                def stashName = "bottle-arm64"
+                                                stash includes: '*.bottle.tar.gz,*.bottle.json', name: stashName
+                                                bottlesBuild << stashName
+                                            } finally{
+                                                sh 'brew uninstall --force --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"'
                                             }
+                                        } finally {
+                                            sh 'brew untap --verbose --force $HOMEBREW_BUILD_TAP'
                                         }
                                     }
                                 }
-                                post{
-                                    failure{
-                                        sh "brew config"
-                                    }
-                                    cleanup{
-                                        sh "brew tap --repair"
-                                        cleanWs(
-                                            deleteDirs: true,
-                                            patterns: [
-                                                [pattern: '*.bottle.*', type: 'INCLUDE'],
-                                                [pattern: 'logs/', type: 'INCLUDE'],
-                                                [pattern: 'home/', type: 'INCLUDE'],
-                                                [pattern: 'steps_output.txt', type: 'INCLUDE'],
-                                            ]
-                                        )
-                                    }
+                            }
+                            post{
+                                failure{
+                                    sh "brew config"
+                                }
+                                cleanup{
+                                    sh "brew tap --repair"
+                                    cleanWs(
+                                        deleteDirs: true,
+                                        patterns: [
+                                            [pattern: '*.bottle.*', type: 'INCLUDE'],
+                                            [pattern: 'logs/', type: 'INCLUDE'],
+                                            [pattern: 'home/', type: 'INCLUDE'],
+                                            [pattern: 'steps_output.txt', type: 'INCLUDE'],
+                                        ]
+                                    )
                                 }
                             }
                         }
