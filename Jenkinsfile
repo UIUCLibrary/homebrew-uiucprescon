@@ -1,6 +1,6 @@
 def formulas = []
 def casks = []
-bottlesBuild = []
+def bottlesBuild = []
 node("!windows") {
     stage("Checking for Homebrew files"){
         ws{
