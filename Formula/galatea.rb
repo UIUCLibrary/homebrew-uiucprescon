@@ -6,8 +6,8 @@ class Galatea < Formula
 
   desc "Used for cleaning up metadata used by UIUC metadata"
   homepage "https://github.com/UIUCLibrary/galatea"
-  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.6.3/galatea-0.6.3.tar.gz"
-  sha256 "d19f24313b75f8d585f3924546af327151a3b3c7aaa3b8cb0a3df99f5603ed59"
+  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.7.0/galatea-0.7.0.tar.gz"
+  sha256 "621f61cec6a1a4b8243309a04dac0b88649bdd6237042f31f2cc52452ad3957b"
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
@@ -97,8 +97,8 @@ class Galatea < Formula
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/53/0c/06f8b233b8fd13b9e5ee11424ef85419ba0d8ba0b3138bf360be2ff56953/urllib3-2.7.0.tar.gz"
-    sha256 "231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c"
+    url "https://files.pythonhosted.org/packages/e3/05/b17359e1cefb4f909b5e40b1b90a496d987258916dbbf88e842c729f510e/urllib3-2.8.0.tar.gz"
+    sha256 "63bf2ead4c879426ebf22ef2a781eeb4aa3b4ae798a0435506f8687fd5bb9b63"
   end
 
   def install
