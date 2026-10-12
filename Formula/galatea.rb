@@ -13,7 +13,7 @@ class Galatea < Formula
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any, arm64_tahoe: "2d81710ec922eb5092432b8011f25d41eb4b254dd7fae574a5cfb3e0f3f69a56"
+    sha256 cellar: :any, arm64_tahoe: "621f61cec6a1a4b8243309a04dac0b88649bdd6237042f31f2cc52452ad3957b"
   end
 
   depends_on "libxml2"
