@@ -6,14 +6,14 @@ class Galatea < Formula
 
   desc "Used for cleaning up metadata used by UIUC metadata"
   homepage "https://github.com/UIUCLibrary/galatea"
-  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.7.3/galatea-0.7.3.tar.gz"
-  sha256 "97232bfec9a0bf66dc0540c6d8ba1c7bad1ae962584a44c3ac85560f7b0d0cd8"
+  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.7.4/galatea-0.7.4.tar.gz"
+  sha256 "2c3277cfde47ce7d09b86476f9857248e50aa0d13a85fb883d48cf3871cae4d5"
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any, arm64_tahoe: "533eb26f3bd51985a03b4b4f93e7260f72afd36937ae8b554600aa14fc0ce6d7"
+    sha256 cellar: :any, arm64_tahoe: "de231c7697fbe80b5c8376d8c1729b136b00f0d39eebf63eb8b24cd883ba2f1e"
   end
 
   depends_on "libxml2"
