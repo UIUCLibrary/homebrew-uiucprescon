@@ -6,14 +6,14 @@ class Galatea < Formula
 
   desc "Used for cleaning up metadata used by UIUC metadata"
   homepage "https://github.com/UIUCLibrary/galatea"
-  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.7.5/galatea-0.7.5.tar.gz"
-  sha256 "b4e8be75b7172aaf8d016904363893a70f0662ec19b0e3c442a248510c719d65"
+  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.7.6/galatea-0.7.6.tar.gz"
+  sha256 "40a0658f88d84f16e5bc531b53fbb61759f5b90fe6f73c12f91fe3779ff16923"
   license "NCSA"
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any, arm64_tahoe: "94af1ae72cd2263255e35911cc662e912a0b28a2923b29badafe43a70b2da8b6"
+    sha256 cellar: :any, arm64_tahoe: "b1d8564321d65c9219035d7f1da164004a2f06c34cba906020a5e01ebbcc9575"
   end
 
   depends_on "libxml2"
@@ -32,8 +32,8 @@ class Galatea < Formula
   end
 
   resource "certifi" do
-    url "https://files.pythonhosted.org/packages/e0/2d/a891ca51311197f6ad14a7ef42e2399f36cf2f9bd44752b3dc4eab60fdc5/certifi-2026.1.4.tar.gz"
-    sha256 "ac726dd470482006e014ad384921ed6438c457018f4b3d204aea4281258b2120"
+    url "https://files.pythonhosted.org/packages/a6/bd/1436c50cc46699de0230fbaacc1d1de7bfec413176099949e9d5112e88f2/certifi-2026.10.19.tar.gz"
+    sha256 "035c1e85572b141bf1c3a3eff0e33a8eb74917522f2559075ff8d2fea780a1ae"
   end
 
   resource "charset-normalizer" do
@@ -89,11 +89,6 @@ class Galatea < Formula
   resource "tomlkit" do
     url "https://files.pythonhosted.org/packages/51/db/03eaf4331631ef6b27d6e3c9b68c54dc6f0d63d87201fed600cc409307fd/tomlkit-0.15.0.tar.gz"
     sha256 "7d1a9ecba3086638211b13814ea79c90dd54dd11993564376f3aa92271f5c7a3"
-  end
-
-  resource "typing-extensions" do
-    url "https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f/typing_extensions-4.15.0.tar.gz"
-    sha256 "0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466"
   end
 
   resource "urllib3" do
