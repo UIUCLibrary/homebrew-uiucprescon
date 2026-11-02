@@ -9,18 +9,19 @@ class Galatea < Formula
   url "https://github.com/UIUCLibrary/galatea/releases/download/v0.7.7/galatea-0.7.7.tar.gz"
   sha256 "2680911c01f4b175e17f79c3c3d59fc544d7aae546aad4316dc8c4cecd8764b8"
   license "NCSA"
+  revision 1
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any, arm64_tahoe: "4cad20ffb1d41c95bc0a77ac05e6fc3b049add6d5997d2443a48b7ff4ebc8e36"
+    # sha256 cellar: :any, arm64_tahoe: "4cad20ffb1d41c95bc0a77ac05e6fc3b049add6d5997d2443a48b7ff4ebc8e36"
   end
 
   depends_on "libxml2"
   depends_on "libxslt"
   depends_on "libyaml"
   depends_on "pyside"
-  depends_on "python@3.14"
+  depends_on "python@3.15"
   depends_on "qt"
 
   conflicts_with "uiuclibrary/uiucprescon/galatea-beta",
@@ -97,8 +98,8 @@ class Galatea < Formula
   end
 
   def install
-    venv = virtualenv_create(libexec, "python3.14")
-    site_packages = Language::Python.site_packages("python3.14")
+    venv = virtualenv_create(libexec, "python3.15")
+    site_packages = Language::Python.site_packages("python3.15")
 
     ohai "Linking global PySide6 into virtual environment"
     mkdir_p "#{libexec}/lib/#{site_packages}"
