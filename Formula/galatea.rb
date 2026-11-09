@@ -6,15 +6,14 @@ class Galatea < Formula
 
   desc "Used for cleaning up metadata used by UIUC metadata"
   homepage "https://github.com/UIUCLibrary/galatea"
-  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.7.7/galatea-0.7.7.tar.gz"
-  sha256 "2680911c01f4b175e17f79c3c3d59fc544d7aae546aad4316dc8c4cecd8764b8"
+  url "https://github.com/UIUCLibrary/galatea/releases/download/v0.7.8/galatea-0.7.8.tar.gz"
+  sha256 "2f11a9125f8232fd53d81d4ae9c7c761aec5388a91e6e226e867e20927325392"
   license "NCSA"
-  revision 1
   head "https://github.com/UIUCLibrary/galatea.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any, arm64_tahoe: "6c32a1ff8b32370b1e024903c5e3afcb13b93dd0ce2c5d5eb4f77d9487e75224"
+    sha256 cellar: :any, arm64_tahoe: "7f460f5f4660d9a0c874a05734d0aee3b9f5402f3a6f152e3ee7655eaa49b033"
   end
 
   depends_on "libxml2"
@@ -78,13 +77,8 @@ class Galatea < Formula
   end
 
   resource "speedwagon" do
-    url "https://nexus.library.illinois.edu/repository/uiuc_prescon_python/packages/speedwagon/0.4.0b27/speedwagon-0.4.0b27.tar.gz"
-    sha256 "0b19537218a09d80d1e1d88a60da4e57d55a62146dd6ccc13dbc075a3cd9a6bd"
-  end
-
-  resource "tomli" do
-    url "https://files.pythonhosted.org/packages/22/de/48c59722572767841493b26183a0d1cc411d54fd759c5607c4590b6563a6/tomli-2.4.1.tar.gz"
-    sha256 "7c7e1a961a0b2f2472c1ac5b69affa0ae1132c39adcb67aba98568702b9cc23f"
+    url "https://nexus.library.illinois.edu/repository/uiuc_prescon_python/packages/speedwagon/0.4.0b28/speedwagon-0.4.0b28.tar.gz"
+    sha256 "0dca5736b6b92a4c637f8f09719509faff0055c544026dffe9e81c833830bf42"
   end
 
   resource "tomlkit" do
