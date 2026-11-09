@@ -187,6 +187,7 @@ pipeline{
                             steps{
                                 withEnv([
                                     "HOMEBREW_FORMULA_FILE=${HOMEBREW_FORMULA_FILE}",
+                                    "HOMEBREW_FORMULA=${HOMEBREW_FORMULA_FILE.replace('Formula/', '').replace('.rb', '')}",
                                     "BOTTLE_URL_ROOT=${BOTTLE_URL_ROOT}"
                                     ]) {
                                     script{
@@ -195,9 +196,9 @@ pipeline{
                                                   cp -r Formula/* $(brew --repo $HOMEBREW_BUILD_TAP)/Formula/
                                                '''
                                             try{
-                                                sh '''brew install --build-bottle --formula "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE" --verbose
-                                                      brew test "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
-                                                      brew bottle --json  --root-url=${BOTTLE_URL_ROOT}/ "$(brew --repo $HOMEBREW_BUILD_TAP)/$HOMEBREW_FORMULA_FILE"
+                                                sh '''brew install --build-bottle --formula "$HOMEBREW_BUILD_TAP/$HOMEBREW_FORMULA" --verbose
+                                                      brew test "$HOMEBREW_BUILD_TAP/$HOMEBREW_FORMULA"
+                                                      brew bottle --json  --root-url=${BOTTLE_URL_ROOT}/ "$HOMEBREW_BUILD_TAP/$HOMEBREW_FORMULA"
                                                    '''
                                                 archiveArtifacts(artifacts: '*.bottle.tar.gz,*.bottle.json', allowEmptyArchive: true)
                                                 def stashName = "bottle-arm64"
