@@ -6,19 +6,18 @@ class Tripwire < Formula
 
   desc "Used for helping out AV preservation"
   homepage "https://github.com/UIUCLibrary/tripwire"
-  url "https://github.com/UIUCLibrary/tripwire/releases/download/v0.3.8/uiucprescon_tripwire-0.3.8.tar.gz"
-  sha256 "a00be88de601d7c5b0d29237a342a2ea55726d8b169faefc79102ec965a2202d"
+  url "https://github.com/UIUCLibrary/tripwire/releases/download/v0.3.9/uiucprescon_tripwire-0.3.9.tar.gz"
+  sha256 "3d917441f5bda3247a2ae55bd1115a627e9638c9ee9a2aa048cea2ec2033c4a1"
   license "NCSA"
   head "https://github.com/UIUCLibrary/tripwire.git", branch: "main"
 
   bottle do
     root_url "https://nexus.library.illinois.edu/repository/homebrew-bottles/"
-    sha256 cellar: :any_skip_relocation, arm64_tahoe: "137ca305cafcd5d3f12e6da5d534e6451dbca8e4204cfeb44e1f330ae668b6a5"
-    sha256 cellar: :any_skip_relocation, sonoma:      "0c0e33a4804ec4fd9b070b3075ac8a2492be5bdc02693a3a059f111e97bc88a8"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe: "785f27fc83ee14e928edc485f1e4e06474f6ae14333fa5c8162b578fa674d46a"
   end
 
   depends_on "conan" => :build
-  depends_on "python@3.14"
+  depends_on "python@3.15"
 
   resource "argcomplete" do
     url "https://files.pythonhosted.org/packages/16/0f/861e168fc813c56a78b35f3c30d91c6757d1fd185af1110f1aec784b35d0/argcomplete-3.6.2.tar.gz"
@@ -49,5 +48,8 @@ class Tripwire < Formula
   test do
     system bin/"tripwire", "--help"
     system bin/"tripwire", "--version"
+    system bin/"tripwire-gui", "--help"
+    system bin/"tripwire-gui", "--version"
+    system bin/"tripwire-gui", "info"
   end
 end
